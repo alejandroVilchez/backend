@@ -1,17 +1,21 @@
-const { Server } = require("socket.io");
+const WebSocket = require("ws");
+
 function setupWebSocket(server) {
-    const io = new Server(server, {
-        cors: { origin: "*" },
-    });
-    io.on("connection", (socket) => {
-        console.log("Cliente conectado");
-        socket.on("gpsData", (data) => {
-            console.log("Datos GPS recibidos:", data);
-            io.emit("gpsUpdate", data);
+    const wss = new WebSocket.Server({ server });
+
+    wss.on("connection", (ws) => {
+        console.log("Cliente WebSocket conectado");
+
+        ws.on("message", (message) => {
+            console.log("Mensaje recibido:", message);
         });
-        socket.on("disconnect", () => {
+
+        ws.on("close", () => {
             console.log("Cliente desconectado");
         });
     });
+
+    return wss;
 }
+
 module.exports = { setupWebSocket };
