@@ -10,6 +10,10 @@ const gpsRoutes = require("./routes/gpsRoutes");
 const app = express();
 const server = http.createServer(app);
 
+app.get("/", (req, res) => {
+    res.send("Hello world!");
+  });
+  
 app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/obstacles", obstacleRoutes);
