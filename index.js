@@ -15,13 +15,14 @@ app.get("/", (req, res) => {
   });
   
 app.use(express.json());
-app.use("/users", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/obstacles", obstacleRoutes);
 app.use("/gps", gpsRoutes);
 
 setupWebSocket(server);
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
 });
+
