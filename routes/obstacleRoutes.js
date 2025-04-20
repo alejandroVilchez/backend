@@ -1,5 +1,5 @@
 const express = require("express");
-const { createObstacle } = require("../controllers/obstacleController");
+const { createObstacle, getAllObstacles, deleteObstacle } = require("../controllers/obstacleController");
 const obstacleRouter = express.Router();
 obstacleRouter.post("/", createObstacle);
 obstacleRouter.get("/", getAllObstacles);
