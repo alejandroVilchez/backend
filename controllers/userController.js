@@ -32,12 +32,17 @@ exports.login = async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ username, password });
+        const user = await User.findOne({ username });
         if (!user) {
-        return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
+          return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
         }
+        const ok = await user.verify(password);
+        if (!ok) {
+            return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
+        }
+
         const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
-        res.status(200).json({ message: "Login exitoso", token, user });
+        res.status(200).json({ message: "Login exitoso", token, user: {id: user._id, username: user.username, email: user.email} });
     } 
     catch (error) {
         console.error(error);
