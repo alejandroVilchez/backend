@@ -36,7 +36,7 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 const PORT = process.env.PORT;
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor corriendo en ${PORT}`);
 });
 
