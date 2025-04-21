@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bycrypt = require('bycrypt');
+const bycrypt = require('bycryptjs');
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
