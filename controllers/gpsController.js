@@ -1,4 +1,15 @@
 const GPSData = require("../models/GPSData");
+
+exports.getGPSByRegatta = async (req, res) => {
+    try {
+        const data = await GPSData.find({ regattaId: req.params.regattaId }).sort( "timestamp" );
+        res.json(data);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+};
+
+
 exports.createGPSData = async (req, res) => {
     try {
         const gpsData = new GPSData(req.body);

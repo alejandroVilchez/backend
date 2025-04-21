@@ -1,7 +1,8 @@
-const express = require("express");
+const router = require("express").Router();
 const { createObstacle, getAllObstacles, deleteObstacle } = require("../controllers/obstacleController");
-const obstacleRouter = express.Router();
-obstacleRouter.post("/", createObstacle);
-obstacleRouter.get("/", getAllObstacles);
-obstacleRouter.delete("/:id", deleteObstacle); 
-module.exports = obstacleRouter;
+const { authMiddleware } = require("../controllers/userController");
+router.use(authMiddleware);
+router.post("/", createObstacle);
+router.get("/", getAllObstacles);
+router.delete("/:id", deleteObstacle); 
+module.exports = router;

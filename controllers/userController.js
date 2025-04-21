@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const secretKey ="abcd1234";
 
 
-exports.createUser = async (req, res) => {
+exports.register = async (req, res) => {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res.status(400).json({ message: "Todos los campos son obligatorios" });
@@ -25,7 +25,7 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.getUsers = async (req, res) => {
+exports.login = async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
         return res.status(400).json({ message: "Todos los campos son obligatorios" });
@@ -42,5 +42,15 @@ exports.getUsers = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error en el login" });
+    }
+};
+
+exports.authMiddleware = (req, res, next) => {
+    const auth = (req.headers.authorization || "").split(" ")[1];
+    try {
+        req.userId = jwt.verify(auth, secretKey).sub;
+        next();
+    } catch {
+        next("Unauthorized");
     }
 };

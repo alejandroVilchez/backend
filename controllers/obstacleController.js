@@ -1,8 +1,7 @@
 const Obstacle = require("../models/Obstacle");
 exports.createObstacle = async (req, res) => {
     try {
-        const obstacle = new Obstacle(req.body);
-        await obstacle.save();
+        const obstacle = await Obstacle.create({owner: req.userId, ...req.body});
         res.status(201).json(obstacle);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -10,7 +9,7 @@ exports.createObstacle = async (req, res) => {
 };
 exports.getAllObstacles = async (req, res) => {
     try {
-        const obstacles = await Obstacle.find(); // Encuentra todos
+        const obstacles = await Obstacle.find({ owner: req.userId }); 
         res.status(200).json(obstacles);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -18,13 +17,9 @@ exports.getAllObstacles = async (req, res) => {
 };
 exports.deleteObstacle = async (req, res) => {
     try {
-        const { id } = req.params; // Obtiene el ID de la URL
-        const deletedObstacle = await Obstacle.findByIdAndDelete(id);
-        if (!deletedObstacle) {
-            return res.status(404).json({ message: "Obstacle not found" });
-        }
+        await Obstacle.deleteOne({ _id: req.params.id, owner: req.userId });
         // Puedes devolver 200 OK con el objeto borrado o 204 No Content
-        res.status(200).json({ message: "Obstacle deleted", obstacle: deletedObstacle });
+        res.status(200).json({ message: "Obstacle deleted"});
         // o res.status(204).send();
     } catch (error) {
          // Añadir manejo si el ID no es un formato válido de ObjectId
