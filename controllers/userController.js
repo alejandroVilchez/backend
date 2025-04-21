@@ -1,6 +1,8 @@
+require("dotenv").config();
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const secretKey ="abcd1234";
+
+const secretKey = process.env.secretKey;
 
 
 exports.register = async (req, res) => {
@@ -52,10 +54,12 @@ exports.login = async (req, res) => {
 
 exports.authMiddleware = (req, res, next) => {
     const auth = (req.headers.authorization || "").split(" ")[1];
+    if (!auth) return res.status(401).json({ message: "No token provided" });  
     try {
-        req.userId = jwt.verify(auth, secretKey).sub;
-        next();
-    } catch {
-        next("Unauthorized");
+      const payload = jwt.verify(auth, secretKey);
+      req.userId = payload.sub;
+      next();
+    } catch (error){
+      return res.status(401).json({ message: "Invalid token" });
     }
 };
