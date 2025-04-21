@@ -6,4 +6,4 @@ router.post("/", createGPSData);
 router.get("/simulatedRegattas", getGPSData);
 router.get("/regattas/:regattaId/points", getGPSByRegatta);
 
-module.exports = gpsRouter;
+module.exports = router;
