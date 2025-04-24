@@ -1,31 +1,44 @@
 const Obstacle = require("../models/Obstacle");
+
 exports.createObstacle = async (req, res) => {
-    try {
-        const obstacle = await Obstacle.create({owner: req.userId, ...req.body});
-        res.status(201).json(obstacle);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  try {
+    const obs = await Obstacle.create({ owner: req.userId, ...req.body });
+    res.status(201).json(obs);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 };
+
 exports.getAllObstacles = async (req, res) => {
-    try {
-        const obstacles = await Obstacle.find({ owner: req.userId }); 
-        res.status(200).json(obstacles);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  try {
+    const list = await Obstacle.find({ owner: req.userId });
+    res.status(200).json(list);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 };
+
 exports.deleteObstacle = async (req, res) => {
-    try {
-        await Obstacle.deleteOne({ _id: req.params.id, owner: req.userId });
-        // Puedes devolver 200 OK con el objeto borrado o 204 No Content
-        res.status(200).json({ message: "Obstacle deleted"});
-        // o res.status(204).send();
-    } catch (error) {
-         // Añadir manejo si el ID no es un formato válido de ObjectId
-         if (error.kind === 'ObjectId') {
-            return res.status(400).json({ message: "Invalid ID format" });
-         }
-        res.status(500).json({ error: error.message });
-    }
+  try {
+    await Obstacle.deleteOne({ _id: req.params.id, owner: req.userId });
+    res.status(200).json({ message: "Deleted" });
+  } catch (e) {
+    if (e.kind === 'ObjectId') return res.status(400).json({ message: "Invalid ID" });
+    res.status(500).json({ error: e.message });
+  }
 };
+
+exports.exportObstacles = async (req,res) => {
+    const list = await Obstacle.find({ owner: req.userId });
+    res.setHeader("Content-Disposition","attachment; filename=obstacles.json");
+    res.json(list);
+  };
+
+exports.importObstacles = async (req,res) => {
+    const docs = req.body.map(o=>({ owner: req.userId, ...o }));
+    await Obstacle.insertMany(docs);
+    res.status(201).json({ imported: docs.length });
+};
+
+
+  
