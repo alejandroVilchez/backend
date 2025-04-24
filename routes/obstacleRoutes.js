@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { createObstacle, getAllObstacles, deleteObstacle } = require("../controllers/obstacleController");
+const { createObstacle, getAllObstacles, deleteObstacle, exportObstacles, importObstacles } = require("../controllers/obstacleController");
 const { authMiddleware } = require("../controllers/userController");
 
 router.use(authMiddleware);

@@ -29,15 +29,26 @@ exports.deleteObstacle = async (req, res) => {
 };
 
 exports.exportObstacles = async (req,res) => {
-    const list = await Obstacle.find({ owner: req.userId });
-    res.setHeader("Content-Disposition","attachment; filename=obstacles.json");
-    res.json(list);
+    try {
+        const obs = await Obstacle.find({ owner: req.userId });
+        res.setHeader("Content-Disposition","attachment; filename=obstacles.json");
+        res.json(list);
+        res.status(200).json(obs);
+    }
+    catch (e) {
+      res.status(500).json({ error: e.message });
+    }    
   };
 
 exports.importObstacles = async (req,res) => {
-    const docs = req.body.map(o=>({ owner: req.userId, ...o }));
-    await Obstacle.insertMany(docs);
-    res.status(201).json({ imported: docs.length });
+    try{
+        const docs = req.body.map(o=>({ owner: req.userId, ...o }));
+        await Obstacle.insertMany(docs);
+        res.status(201).json({ imported: docs.length });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+    
 };
 
 
