@@ -10,6 +10,7 @@ const obstacleRoutes = require("./routes/obstacleRoutes");
 const gpsRoutes = require("./routes/gpsRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const regattaRoutes = require("./routes/regattaRoutes");
+const simulationRoutes = require('./routes/simulationRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -24,6 +25,7 @@ app.use("/api/profiles", profileRoutes);
 app.use("/api/obstacles", obstacleRoutes);
 app.use("/api", gpsRoutes);
 app.use("/api/regattas", regattaRoutes);
+app.use('/api/regattas', simulationRoutes);
 
 setupWebSocket(server);
 

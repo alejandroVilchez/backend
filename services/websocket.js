@@ -1,3 +1,4 @@
+//services/websocket.js
 const WebSocket = require("ws");
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
@@ -48,4 +49,4 @@ function setupWebSocket(server) {
     return wss;
 }
 
-module.exports = { setupWebSocket };
+module.exports = { setupWebSocket, clients };
