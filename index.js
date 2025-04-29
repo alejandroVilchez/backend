@@ -1,3 +1,4 @@
+//index.js
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("./db");
@@ -10,8 +11,8 @@ const obstacleRoutes = require("./routes/obstacleRoutes");
 const gpsRoutes = require("./routes/gpsRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const regattaRoutes = require("./routes/regattaRoutes");
-const boatRoutes = require("./routes/boatRoutes");
-const simulationRoutes = require('./routes/simulationRoutes');
+const simulationRoutes = require("./routes/simulationRoutes");
+const boatRoutes       = require("./routes/boatRoutes");
 
 const app = express();
 const server = http.createServer(app);
@@ -26,8 +27,8 @@ app.use("/api/profiles", profileRoutes);
 app.use("/api/obstacles", obstacleRoutes);
 app.use("/api", gpsRoutes);
 app.use("/api/regattas", regattaRoutes);
-app.use('/api/regattas/:regattaId', simulationRoutes);
-app.use('/api/regattas/:regattaId/boats', boatRoutes);
+app.use("/api/regattas/:regattaId", simulationRoutes);
+app.use("/api/regattas/:regattaId/boats", boatRoutes);
 
 setupWebSocket(server);
 

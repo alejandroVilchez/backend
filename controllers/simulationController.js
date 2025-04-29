@@ -1,11 +1,12 @@
 // controllers/simulationController.js
-const Boat= require('../models/Boat');
-const { seedBoats, startBoatSimulation } = require('../services/simulator');
+const Boat= require("../models/Boat");
+const { seedBoats, startBoatSimulation } = require("../services/simulator");
 
 let intervalsMap = new Map();
 
 exports.startRegattaSimulation = async (req, res) => {
   const { regattaId } = req.params;
+
   if (intervalsMap.has(regattaId)) {
     return res.status(400).json({ message: "Simulación ya en marcha" });
   }
