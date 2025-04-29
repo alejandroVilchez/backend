@@ -1,6 +1,11 @@
-const router = require("express").Router();
-const {listBoats, createBoat} = require("../controllers/boatController");
+// routes/boatRoutes.js
+const router = require('express').Router({ mergeParams: true });
+const Boat = require('../models/Boat');
 
-router.get("/", listBoats);
-//router.post("/", createBoat);
+router.get('/', async (req, res) => {
+  const { regattaId } = req.params;
+  const boats = await Boat.find({ regattaId });
+  res.json(boats);
+});
+
 module.exports = router;

@@ -1,24 +1,21 @@
 // services/simulator.js
-const Boat    = require('../models/Boat');
-const GPSData = require('../models/GPSData');
+const Boat   = require('../models/Boat');
+const GPSData= require('../models/GPSData');
+const WebSocket = require('ws');
 const { clients } = require('./websocket');
-const WebSocket   = require('ws');
-
 
 async function seedBoats(regattaId, count = 5) {
   const boats = Array.from({ length: count }, (_, i) => ({
     regattaId,
-    name:      `Barco #${i+1}`,
-    latitude:  0  + Math.random() * 0.01,
-    longitude: 0  + Math.random() * 0.01,
-    yaw:       0
+    name:     `Barco #${i+1}`,
+    latitude: 0  + Math.random()*0.01,
+    longitude: 0 + Math.random()*0.01,
+    yaw:      0
   }));
   return Boat.insertMany(boats);
 }
 
-
 function startBoatSimulation(boat) {
-  const regId = boat.regattaId.toString();
   return setInterval(async () => {
     boat.latitude  += 0.0001;
     boat.yaw        = (boat.yaw + 5) % 360;
@@ -26,16 +23,17 @@ function startBoatSimulation(boat) {
     await boat.save();
 
     await GPSData.create({
-      regattaId: regId,
+      regattaId: boat.regattaId,
       latitude:  boat.latitude,
       longitude: boat.longitude,
       yaw:       boat.yaw
     });
 
-    for (const ws of clients.get(regId) || []) {
+    const key = boat.regattaId.toString();
+    for (let ws of clients.get(key) || []) {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({
-          regattaId: regId,
+          regattaId: boat.regattaId,
           boatId:    boat._id,
           latitude:  boat.latitude,
           longitude: boat.longitude,
@@ -47,4 +45,7 @@ function startBoatSimulation(boat) {
   }, 1000);
 }
 
-module.exports = { seedBoats, startBoatSimulation };
+module.exports = {
+  seedBoats,
+  startBoatSimulation,
+};

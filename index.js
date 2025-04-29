@@ -26,8 +26,8 @@ app.use("/api/profiles", profileRoutes);
 app.use("/api/obstacles", obstacleRoutes);
 app.use("/api", gpsRoutes);
 app.use("/api/regattas", regattaRoutes);
-app.use("/api/regattas/:regattaId/boats", boatRoutes);
-app.use("/api/regattas", simulationRoutes);
+app.use('/api/regattas/:regattaId', simulationRoutes);
+app.use('/api/regattas/:regattaId/boats', boatRoutes);
 
 setupWebSocket(server);
 

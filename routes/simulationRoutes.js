@@ -4,7 +4,7 @@ const { authMiddleware } = require('../controllers/userController');  // si quie
 
 router.use(authMiddleware);
 
-router.post('/:regattaId/simulate/start', startRegattaSimulation);
-router.post('/:regattaId/simulate/stop',  stopRegattaSimulation);
+router.post('/simulate/start', startRegattaSimulation);
+router.post('/simulate/stop',  stopRegattaSimulation);
 
 module.exports = router;
