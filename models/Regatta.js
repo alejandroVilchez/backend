@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const regattaSchema = new mongoose.Schema({
-    owner: ObjectId, 
+    owner: {type: mongoose.Schema.Types.ObjectId,ref: 'User',required: true }, 
     name: String,
     isLive: { type: Boolean, default: false },
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
