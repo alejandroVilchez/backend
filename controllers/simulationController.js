@@ -40,5 +40,8 @@ exports.stopRegattaSimulation = async (req, res) => {
   const timers = intervalsMap.get(regattaId) || [];
   timers.forEach(clearInterval);
   intervalsMap.delete(regattaId);
+
+  await Regatta.findByIdAndUpdate(regattaId, { isLive: false });
+
   res.json({ message: "Simulación detenida" });
 };
